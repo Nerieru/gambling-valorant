@@ -7,133 +7,157 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --bg:#0d0f13; --bg2:#15181e; --card:#1b1f27; --line:#2b303b;
-    --ink:#eceae4; --mute:#8b909c; --red:#ef4356; --red-dim:#7a2530;
-    --gold:#e8b95a; --green:#48c98a;
-    box-sizing:border-box;
-    padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
-  }
-  *{box-sizing:border-box;}
-  html,body{height:100%;}
-  html{scroll-padding-top:env(safe-area-inset-top,0px);}
-  body{
-    margin:0; background:var(--bg); color:var(--ink);
-    font-family:'Rajdhani',sans-serif; font-size:17px;
-    display:flex; justify-content:center;
-    background-image:
-      linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%);
-  }
-  .wrap{width:100%; max-width:480px; padding:28px 18px 40px;}
-  h1{
-    font-family:'Oswald',sans-serif; font-weight:700; font-size:28px;
-    letter-spacing:.02em; margin:0 0 2px; color:var(--ink);
-  }
-  .sub{color:var(--mute); font-size:15px; margin:0 0 22px; line-height:1.4;}
-  .panel{
-    background:var(--card); border:1px solid var(--line); border-radius:10px;
-    padding:18px; margin-bottom:14px;
-  }
-  label{
-    display:block; font-family:'Oswald',sans-serif; font-size:12px;
-    color:var(--mute); margin-bottom:6px; letter-spacing:.03em;
-  }
-  input[type=number], select{
-    width:100%; background:var(--bg2); border:1px solid var(--line); color:var(--ink);
-    font-family:'Rajdhani',sans-serif; font-weight:600; font-size:17px;
-    padding:11px 12px; border-radius:7px; outline:none;
-  }
-  input[type=number]:focus, select:focus{border-color:var(--red);}
-  .row2{display:flex; gap:12px;}
-  .row2 > div{flex:1;}
-  select{appearance:none; -webkit-appearance:none;
-    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238b909c' stroke-width='2'><path d='M6 9l6 6 6-6'/></svg>");
-    background-repeat:no-repeat; background-position:right 10px center; background-size:18px;
-  }
-  button.roll{
-    width:100%; margin-top:4px; padding:16px; border:none; border-radius:8px;
-    background:var(--red); color:#12141a; font-family:'Oswald',sans-serif;
-    font-weight:700; font-size:19px; letter-spacing:.04em; cursor:pointer;
-    transition:transform .08s ease, background .15s ease;
-  }
-  button.roll:active{transform:scale(.98);}
-  button.roll:disabled{background:var(--red-dim); color:#8b8f98; cursor:not-allowed;}
-  .hint{color:var(--mute); font-size:13px; margin-top:8px; min-height:16px;}
+:root{
+  --bg:#0a0b0e; --bg2:#111319; --card:#171a21; --reel:#1d212b; --line:#2a2f3b;
+  --ink:#eceae4; --mute:#868b96; --red:#ef4356; --gold:#e8b95a; --green:#48c98a;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box;}
+html,body{height:100%;}
+body{margin:0; background:var(--bg); color:var(--ink); font-family:'Rajdhani',sans-serif;
+  display:flex; justify-content:center;}
+.wrap{width:100%; max-width:720px; padding:20px 16px 36px;}
+.top{display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; gap:12px; flex-wrap:wrap;}
+h1{font-family:'Oswald',sans-serif; font-weight:700; font-size:22px; letter-spacing:.03em; margin:0;}
+.ctrl{display:flex; gap:10px; align-items:center; flex-wrap:wrap;}
+label{font-family:'Oswald',sans-serif; font-size:11px; color:var(--mute); margin-right:6px;}
+input[type=number], select{
+  background:var(--card); border:1px solid var(--line); color:var(--ink); font-family:'Rajdhani',sans-serif;
+  font-weight:600; font-size:15px; padding:7px 9px; border-radius:6px; outline:none; width:100px;
+}
+select{width:auto;}
+input:focus, select:focus{border-color:var(--red);}
+.balance{font-family:'Oswald',sans-serif; font-size:13px; color:var(--mute); text-align:right;}
+.balance b{color:var(--gold); font-size:20px; font-family:'Rajdhani',sans-serif; display:block;}
 
-  .result{display:none;}
-  .result.show{display:block;}
-  .rline{
-    display:flex; justify-content:space-between; align-items:baseline;
-    padding:10px 0; border-bottom:1px solid var(--line);
-  }
-  .rline:last-of-type{border-bottom:none;}
-  .rtag{font-family:'Oswald',sans-serif; font-size:11px; color:var(--mute); letter-spacing:.05em; width:78px; flex-shrink:0;}
-  .rval{font-weight:700; font-size:17px; text-align:right; flex:1;}
-  .rcost{color:var(--gold); font-size:13px; margin-left:8px; font-weight:600; white-space:nowrap;}
-  .empty{color:var(--mute); font-style:normal;}
-  .summary{
-    display:flex; justify-content:space-between; margin-top:14px; padding-top:12px;
-    border-top:1px solid var(--line); font-family:'Oswald',sans-serif; font-size:13px;
-  }
-  .summary b{color:var(--ink); font-family:'Rajdhani',sans-serif; font-size:16px;}
-  .left-ok{color:var(--green);}
-  .left-warn{color:var(--red);}
-  footer{color:var(--mute); font-size:12px; text-align:center; margin-top:22px; line-height:1.5;}
+.reels{display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;}
+.col-head{font-family:'Oswald',sans-serif; font-size:12px; letter-spacing:.05em; color:var(--mute); margin-bottom:6px; text-align:center;}
+.reel{
+  background:var(--reel); border:1px solid var(--line); border-radius:10px; position:relative;
+  height:190px; overflow:hidden; display:flex; align-items:center; justify-content:center;
+}
+.reel.secured{border-color:var(--gold); box-shadow:0 0 0 1px var(--gold) inset;}
+.tag{
+  position:absolute; top:8px; right:8px; background:rgba(72,201,138,.15); color:var(--green);
+  font-family:'Oswald',sans-serif; font-size:10px; padding:3px 7px; border-radius:20px; letter-spacing:.03em;
+  opacity:0; transform:translateY(-4px); transition:opacity .2s ease, transform .2s ease;
+}
+.tag.show{opacity:1; transform:translateY(0);}
+.slot-content{text-align:center; padding:10px;}
+.slot-content svg{width:44px; height:44px; margin-bottom:6px;}
+.slot-name{font-family:'Oswald',sans-serif; font-weight:600; font-size:13px; letter-spacing:.02em;}
+.slot-cost{color:var(--gold); font-size:12px; margin-top:3px;}
+.slot-empty{color:var(--mute); font-size:13px;}
+.ability-stack{display:flex; flex-direction:column; gap:8px; width:100%; padding:10px;}
+.ability-stack .ab-row{display:flex; align-items:center; gap:8px; justify-content:center;}
+.ability-stack svg{width:24px; height:24px; margin:0; flex-shrink:0;}
+.ability-stack .slot-name{font-size:12px;}
+.ability-stack .slot-cost{margin-top:0; font-size:11px;}
+.ab-count{font-family:'Oswald',sans-serif; font-size:10px; color:var(--mute); position:absolute; top:8px; left:8px;}
+
+.pullbar{margin-top:16px; display:flex; gap:12px; align-items:stretch;}
+button.pull{
+  flex:1; padding:16px; border:none; border-radius:9px; background:var(--red); color:#12141a;
+  font-family:'Oswald',sans-serif; font-weight:700; font-size:18px; letter-spacing:.05em; cursor:pointer;
+}
+button.pull:active{transform:scale(.99);}
+button.pull:disabled{background:#5c2a31; color:#8b8f98; cursor:not-allowed;}
+
+.summary{
+  margin-top:14px; background:var(--card); border:1px solid var(--line); border-radius:10px;
+  padding:12px 16px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;
+}
+.summary .figs{display:flex; gap:22px;}
+.fig{text-align:left;}
+.fig span{display:block; font-family:'Oswald',sans-serif; font-size:10px; color:var(--mute); letter-spacing:.04em;}
+.fig b{font-size:16px;}
+.left-ok{color:var(--green);}
+.left-warn{color:var(--red);}
+.badge{
+  font-family:'Oswald',sans-serif; font-size:11px; letter-spacing:.04em; color:var(--gold);
+  border:1px solid var(--gold); padding:6px 10px; border-radius:6px; opacity:0; transition:opacity .3s ease;
+}
+.badge.show{opacity:1;}
+footer{color:var(--mute); font-size:11px; text-align:center; margin-top:18px; line-height:1.5;}
+.lucide{color:var(--gold); stroke-width:2.1;}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <h1>BUY ROULETTE</h1>
-  <p class="sub">Set your credits, pick your agent, and let the roll decide your loadout this round.</p>
-
-  <div class="panel">
-    <div class="row2">
-      <div>
-        <label for="credits">Credits</label>
-        <input type="number" id="credits" min="0" max="9000" step="50" value="4000">
-      </div>
-      <div>
-        <label for="agent">Agent</label>
-        <select id="agent"></select>
-      </div>
-    </div>
-    <button class="roll" id="rollBtn">ROLL LOADOUT</button>
-    <div class="hint" id="hint"></div>
+  <div class="top">
+    <h1>BUY ROULETTE</h1>
+    <div class="balance">BALANCE<b id="balDisplay">0</b></div>
   </div>
 
-  <div class="panel result" id="result">
-    <div class="rline">
-      <span class="rtag">WEAPON</span>
-      <span class="rval" id="rWeapon">—</span>
+  <div class="ctrl" style="margin-bottom:14px;">
+    <div><label for="credits">CREDITS</label><input type="number" id="credits" min="0" max="9000" step="50" value="3650"></div>
+    <div><label for="agent">AGENT</label><select id="agent"></select></div>
+  </div>
+
+  <div class="reels">
+    <div class="col">
+      <div class="col-head">WEAPON</div>
+      <div class="reel" id="reelWeapon"><div class="tag" id="tagWeapon">SECURED</div><div class="slot-content slot-empty">—</div></div>
     </div>
-    <div class="rline">
-      <span class="rtag">SHIELD</span>
-      <span class="rval" id="rShield">—</span>
+    <div class="col">
+      <div class="col-head">ABILITY</div>
+      <div class="reel" id="reelAbility"><div class="tag" id="tagAbility">SECURED</div><div class="slot-content slot-empty">—</div></div>
     </div>
-    <div class="rline">
-      <span class="rtag">ABILITIES</span>
-      <span class="rval" id="rAbilities">—</span>
-    </div>
-    <div class="summary">
-      <span>SPENT: <b id="rSpent">0</b></span>
-      <span>CREDITS LEFT: <b id="rLeft">0</b></span>
+    <div class="col">
+      <div class="col-head">SHIELD</div>
+      <div class="reel" id="reelShield"><div class="tag" id="tagShield">SECURED</div><div class="slot-content slot-empty">—</div></div>
     </div>
   </div>
 
-  <footer>Weapon &amp; ability prices are approximate to in-game values. This is an unofficial fan tool, not affiliated with Riot Games.</footer>
+  <div class="pullbar">
+    <button class="pull" id="pullBtn">PULL</button>
+  </div>
+
+  <div class="summary">
+    <div class="figs">
+      <div class="fig"><span>START</span><b id="figStart">0</b></div>
+      <div class="fig"><span>SPENT</span><b id="figSpent">0</b></div>
+      <div class="fig"><span>LEFT</span><b id="figLeft">0</b></div>
+    </div>
+    <div class="badge" id="fullBadge">FULL LOADOUT — EVERY SLOT FILLED</div>
+  </div>
+
+  <footer>Original icons and layout, inspired by loadout-roulette challenge videos. Unofficial fan tool — not affiliated with Riot Games. Prices approximate.</footer>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.525.0/dist/umd/lucide.js"></script>
 <script>
+// Category -> Lucide icon name (neutral, MIT-licensed icon set — not Riot's official art)
+const ICONS = {
+  sidearm:"circle-dot",
+  smg:"zap",
+  shotgun:"flame",
+  rifle:"target",
+  sniper:"crosshair",
+  heavy:"swords",
+  ability:"sparkles",
+  shieldNone:"shield",
+  shieldLight:"shield-half",
+  shieldHeavy:"shield-check",
+};
+let iconSeq = 0;
+function svg(name){
+  iconSeq++;
+  return `<i data-lucide="${ICONS[name]}" data-seq="${iconSeq}"></i>`;
+}
+function paintIcons(){ if(window.lucide) lucide.createIcons(); }
+
 const WEAPONS = [
-  {n:"Classic", c:0},{n:"Shorty", c:200},{n:"Frenzy", c:400},{n:"Ghost", c:500},{n:"Sheriff", c:800},
-  {n:"Stinger", c:1000},{n:"Spectre", c:1600},
-  {n:"Bucky", c:850},{n:"Judge", c:1500},
-  {n:"Bulldog", c:2050},{n:"Guardian", c:2250},{n:"Phantom", c:2900},{n:"Vandal", c:2900},
-  {n:"Marshal", c:950},{n:"Outlaw", c:2400},{n:"Operator", c:4700},
-  {n:"Ares", c:1600},{n:"Odin", c:3200},
+  {n:"Classic", c:0, cat:"sidearm"},{n:"Shorty", c:200, cat:"sidearm"},{n:"Frenzy", c:400, cat:"sidearm"},
+  {n:"Ghost", c:500, cat:"sidearm"},{n:"Sheriff", c:800, cat:"sidearm"},
+  {n:"Stinger", c:1000, cat:"smg"},{n:"Spectre", c:1600, cat:"smg"},
+  {n:"Bucky", c:850, cat:"shotgun"},{n:"Judge", c:1500, cat:"shotgun"},
+  {n:"Bulldog", c:2050, cat:"rifle"},{n:"Guardian", c:2250, cat:"rifle"},{n:"Phantom", c:2900, cat:"rifle"},{n:"Vandal", c:2900, cat:"rifle"},
+  {n:"Marshal", c:950, cat:"sniper"},{n:"Outlaw", c:2400, cat:"sniper"},{n:"Operator", c:4700, cat:"sniper"},
+  {n:"Ares", c:1600, cat:"heavy"},{n:"Odin", c:3200, cat:"heavy"},
 ];
 const SHIELDS = [
-  {n:"None", c:0},{n:"Light Shield (25)", c:400},{n:"Heavy Shield (50)", c:1000},
+  {n:"None", c:0, icon:"shieldNone"},{n:"Light Armor", c:400, icon:"shieldLight"},{n:"Heavy Armor", c:1000, icon:"shieldHeavy"},
 ];
 const AGENTS = {
   "Brimstone":[{n:"Stim Beacon",c:100},{n:"Incendiary",c:250}],
@@ -142,7 +166,7 @@ const AGENTS = {
   "Killjoy":[{n:"Alarmbot",c:200},{n:"Turret",c:200},{n:"Nanoswarm",c:200}],
   "Cypher":[{n:"Trapwire",c:200},{n:"Cyber Cage",c:100},{n:"Spycam",c:200}],
   "Sova":[{n:"Shock Bolt",c:150},{n:"Recon Bolt",c:200},{n:"Owl Drone",c:400}],
-  "Sage":[{n:"Slow Orb",c:100},{n:"Healing Orb",c:200},{n:"Barrier Orb",c:400}],
+  "Sage":[{n:"Barrier Orb",c:400},{n:"Slow Orb",c:100},{n:"Healing Orb",c:200}],
   "Phoenix":[{n:"Curveball",c:200},{n:"Hot Hands",c:200},{n:"Blaze",c:200}],
   "Jett":[{n:"Cloudburst",c:100},{n:"Updraft",c:100}],
   "Raze":[{n:"Boom Bot",c:200},{n:"Blast Pack",c:200},{n:"Paint Shells",c:300}],
@@ -167,65 +191,109 @@ Object.keys(AGENTS).sort().forEach(name=>{
   const o=document.createElement('option'); o.value=name; o.textContent=name;
   agentSel.appendChild(o);
 });
-agentSel.value = "Jett";
+agentSel.value = "Sage";
 
 function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+function shuffle(arr){ return [...arr].sort(()=>Math.random()-0.5); }
 
 function rollLoadout(credits, agentName){
   const affordableWeapons = WEAPONS.filter(w=>w.c<=credits);
   const weapon = pick(affordableWeapons.length?affordableWeapons:[WEAPONS[0]]);
   let remaining = credits - weapon.c;
 
-  const affordableShields = SHIELDS.filter(s=>s.c<=remaining);
-  const shield = pick(affordableShields);
+  const shuffledAbilities = shuffle(AGENTS[agentName]);
+  const bought = [];
+  for(const ab of shuffledAbilities){
+    if(ab.c<=remaining){ bought.push(ab); remaining -= ab.c; }
+  }
+
+  const affordableShields = SHIELDS.filter(s=>s.c<=remaining).sort((a,b)=>b.c-a.c);
+  const shield = affordableShields[0] || SHIELDS[0];
   remaining -= shield.c;
 
-  const pool = [...AGENTS[agentName]].sort(()=>Math.random()-0.5);
-  const boughtAbilities = [];
-  for(const ab of pool){
-    if(remaining>=ab.c && Math.random()<0.55){
-      boughtAbilities.push(ab);
-      remaining -= ab.c;
-    }
-  }
-
-  const spent = credits - remaining;
-  return {weapon, shield, boughtAbilities, spent, remaining};
+  const fullLoadout = bought.length===AGENTS[agentName].length && shield.c>0 && weapon.c>0;
+  return {weapon, bought, totalAbilities:AGENTS[agentName].length, shield, spent:credits-remaining, remaining, fullLoadout};
 }
 
-document.getElementById('rollBtn').addEventListener('click', ()=>{
+function flicker(el, generator, duration, cb){
+  let t=0; const step=90;
+  const timer = setInterval(()=>{ el.innerHTML = generator(); paintIcons(); t+=step; if(t>=duration){ clearInterval(timer); cb(); } }, step);
+}
+
+const pullBtn = document.getElementById('pullBtn');
+pullBtn.addEventListener('click', ()=>{
   const creditsInput = document.getElementById('credits');
-  let credits = parseInt(creditsInput.value, 10);
-  const hint = document.getElementById('hint');
-  if(isNaN(credits) || credits<0){
-    hint.textContent = "Enter a valid credit amount first.";
-    return;
-  }
-  credits = Math.min(credits, 9000);
-  hint.textContent = "";
-
+  let credits = parseInt(creditsInput.value,10);
+  if(isNaN(credits)||credits<0){ return; }
+  credits = Math.min(credits,9000);
+  document.getElementById('balDisplay').textContent = credits;
   const agentName = agentSel.value;
-  const res = rollLoadout(credits, agentName);
 
-  document.getElementById('rWeapon').innerHTML = res.weapon.n + `<span class="rcost">${res.weapon.c}</span>`;
-  document.getElementById('rShield').innerHTML = res.shield.n==="None"
-    ? `<span class="empty">None</span>`
-    : res.shield.n + `<span class="rcost">${res.shield.c}</span>`;
+  ['Weapon','Ability','Shield'].forEach(k=>document.getElementById('tag'+k).classList.remove('show'));
+  document.getElementById('fullBadge').classList.remove('show');
+  pullBtn.disabled = true;
 
-  const abilEl = document.getElementById('rAbilities');
-  if(res.boughtAbilities.length===0){
-    abilEl.innerHTML = `<span class="empty">None</span>`;
-  } else {
-    abilEl.innerHTML = res.boughtAbilities.map(a=>`${a.n}<span class="rcost">${a.c}</span>`).join('<br>');
-  }
+  const wEl = document.querySelector('#reelWeapon .slot-content') || document.getElementById('reelWeapon');
+  const aEl = document.getElementById('reelAbility');
+  const sEl = document.getElementById('reelShield');
+  const weaponReel = document.getElementById('reelWeapon');
+  const abilityReel = document.getElementById('reelAbility');
+  const shieldReel = document.getElementById('reelShield');
 
-  document.getElementById('rSpent').textContent = res.spent;
-  const leftEl = document.getElementById('rLeft');
-  leftEl.textContent = res.remaining;
-  leftEl.className = res.remaining >= 0 ? 'left-ok' : 'left-warn';
+  const wSlot = weaponReel.querySelector('.slot-content');
+  const aSlot = abilityReel.querySelector('.slot-content');
+  const sSlot = shieldReel.querySelector('.slot-content');
 
-  document.getElementById('result').classList.add('show');
+  const randWeapon = ()=>{ const w=pick(WEAPONS); return `<div class="slot-content">${svg(w.cat)}<div class="slot-name">${w.n}</div></div>`; };
+  const randAbility = ()=>{ const all=Object.values(AGENTS).flat(); const a=pick(all); return `<div class="slot-content">${svg('ability')}<div class="slot-name">${a.n}</div></div>`; };
+  const randShield = ()=>{ const s=pick(SHIELDS); return `<div class="slot-content">${svg(s.icon)}<div class="slot-name">${s.n}</div></div>`; };
+
+  weaponReel.innerHTML = '<div class="tag" id="tagWeapon">SECURED</div>';
+  abilityReel.innerHTML = '<div class="tag" id="tagAbility">SECURED</div>';
+  shieldReel.innerHTML = '<div class="tag" id="tagShield">SECURED</div>';
+  const wc = document.createElement('div'); weaponReel.appendChild(wc);
+  const ac = document.createElement('div'); abilityReel.appendChild(ac);
+  const sc = document.createElement('div'); shieldReel.appendChild(sc);
+
+  let done=0;
+  const finish = (res)=>{
+    done++;
+    weaponReel.classList.add('secured');
+    document.getElementById('tagWeapon').classList.add('show');
+    wc.innerHTML = `<div class="slot-content">${svg(res.weapon.cat)}<div class="slot-name">${res.weapon.n}</div><div class="slot-cost">${res.weapon.c} CR</div></div>`;
+
+    abilityReel.classList.add('secured');
+    document.getElementById('tagAbility').classList.add('show');
+    ac.className='ability-stack';
+    ac.innerHTML = `<div class="ab-count">${res.bought.length}/${res.totalAbilities} SECURED</div>` + (res.bought.length
+      ? res.bought.map(a=>`<div class="ab-row">${svg('ability')}<div><div class="slot-name">${a.n}</div><div class="slot-cost">${a.c} CR</div></div></div>`).join('')
+      : `<div class="slot-empty" style="text-align:center;width:100%;">None affordable</div>`);
+
+    shieldReel.classList.add('secured');
+    document.getElementById('tagShield').classList.add('show');
+    sc.innerHTML = res.shield.c>0
+      ? `<div class="slot-content">${svg(res.shield.icon)}<div class="slot-name">${res.shield.n}</div><div class="slot-cost">${res.shield.c} CR</div></div>`
+      : `<div class="slot-content">${svg('shieldNone')}<div class="slot-name">None</div></div>`;
+
+    document.getElementById('figStart').textContent = credits;
+    document.getElementById('figSpent').textContent = res.spent;
+    const leftEl = document.getElementById('figLeft');
+    leftEl.textContent = res.remaining;
+    leftEl.className = res.remaining>=0 ? 'left-ok' : 'left-warn';
+    if(res.fullLoadout) document.getElementById('fullBadge').classList.add('show');
+
+    paintIcons();
+    pullBtn.disabled = false;
+  };
+
+  const result = rollLoadout(credits, agentName);
+  flicker(wc, randWeapon, 700, ()=>{});
+  flicker(ac, randAbility, 850, ()=>{});
+  flicker(sc, randShield, 1000, ()=>{ finish(result); });
 });
+
+document.getElementById('balDisplay').textContent = document.getElementById('credits').value;
+document.getElementById('figStart').textContent = document.getElementById('credits').value;
 </script>
 </body>
 </html>
