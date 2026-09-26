@@ -86,43 +86,43 @@ footer{color:var(--mute); font-size:11px; text-align:center; margin-top:18px; li
 <div class="wrap">
   <div class="top">
     <h1>BUY ROULETTE</h1>
-    <div class="balance">BALANCE<b id="balDisplay">0</b></div>
+    <div class="balance">SALDO<b id="balDisplay">0</b></div>
   </div>
 
   <div class="ctrl" style="margin-bottom:14px;">
-    <div><label for="credits">CREDITS</label><input type="number" id="credits" min="0" max="9000" step="50" value="3650"></div>
-    <div><label for="agent">AGENT</label><select id="agent"></select></div>
+    <div><label for="credits">CRÉDITOS</label><input type="number" id="credits" min="0" max="9000" step="50" value="3650"></div>
+    <div><label for="agent">AGENTE</label><select id="agent"></select></div>
   </div>
 
   <div class="reels">
     <div class="col">
-      <div class="col-head">WEAPON</div>
-      <div class="reel" id="reelWeapon"><div class="tag" id="tagWeapon">SECURED</div><div class="slot-content slot-empty">—</div></div>
+      <div class="col-head">ARMA</div>
+      <div class="reel" id="reelWeapon"><div class="tag" id="tagWeapon">ASEGURADO</div><div class="slot-content slot-empty">—</div></div>
     </div>
     <div class="col">
-      <div class="col-head">ABILITY</div>
-      <div class="reel" id="reelAbility"><div class="tag" id="tagAbility">SECURED</div><div class="slot-content slot-empty">—</div></div>
+      <div class="col-head">HABILIDAD</div>
+      <div class="reel" id="reelAbility"><div class="tag" id="tagAbility">ASEGURADO</div><div class="slot-content slot-empty">—</div></div>
     </div>
     <div class="col">
-      <div class="col-head">SHIELD</div>
-      <div class="reel" id="reelShield"><div class="tag" id="tagShield">SECURED</div><div class="slot-content slot-empty">—</div></div>
+      <div class="col-head">ESCUDO</div>
+      <div class="reel" id="reelShield"><div class="tag" id="tagShield">ASEGURADO</div><div class="slot-content slot-empty">—</div></div>
     </div>
   </div>
 
   <div class="pullbar">
-    <button class="pull" id="pullBtn">PULL</button>
+    <button class="pull" id="pullBtn">TIRAR</button>
   </div>
 
   <div class="summary">
     <div class="figs">
-      <div class="fig"><span>START</span><b id="figStart">0</b></div>
-      <div class="fig"><span>SPENT</span><b id="figSpent">0</b></div>
-      <div class="fig"><span>LEFT</span><b id="figLeft">0</b></div>
+      <div class="fig"><span>INICIO</span><b id="figStart">0</b></div>
+      <div class="fig"><span>GASTADO</span><b id="figSpent">0</b></div>
+      <div class="fig"><span>RESTANTE</span><b id="figLeft">0</b></div>
     </div>
-    <div class="badge" id="fullBadge">FULL LOADOUT — EVERY SLOT FILLED</div>
+    <div class="badge" id="fullBadge">EQUIPO COMPLETO — TODAS LAS CASILLAS LLENAS</div>
   </div>
 
-  <footer>Original icons and layout, inspired by loadout-roulette challenge videos. Unofficial fan tool — not affiliated with Riot Games. Prices approximate.</footer>
+  <footer>Nombres de habilidades en español LATAM. La habilidad de firma de cada agente (marcada GRATIS) siempre está disponible sin costo, igual que en el juego. Astra es especial: no compra habilidades sueltas, compra Estrellas (1 gratis + hasta 4 más a 150 créditos) para lanzar Pozo Gravitatorio, Pulso Nova y Nebulosa/Disipar. Herramienta de fans no oficial — sin afiliación con Riot Games. Precios sujetos a cambios con futuros parches.</footer>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/lucide@0.525.0/dist/umd/lucide.js"></script>
@@ -157,33 +157,34 @@ const WEAPONS = [
   {n:"Ares", c:1600, cat:"heavy"},{n:"Odin", c:3200, cat:"heavy"},
 ];
 const SHIELDS = [
-  {n:"None", c:0, icon:"shieldNone"},{n:"Light Armor", c:400, icon:"shieldLight"},{n:"Heavy Armor", c:1000, icon:"shieldHeavy"},
+  {n:"Ninguno", c:0, icon:"shieldNone"},{n:"Escudo Ligero", c:400, icon:"shieldLight"},{n:"Escudo Pesado", c:1000, icon:"shieldHeavy"},
 ];
 const AGENTS = {
-  "Brimstone":[{n:"Stim Beacon",c:100},{n:"Incendiary",c:250}],
-  "Viper":[{n:"Poison Cloud",c:200},{n:"Snake Bite",c:200},{n:"Toxic Screen",c:200}],
-  "Omen":[{n:"Paranoia",c:150},{n:"Shrouded Step",c:100},{n:"Dark Cover",c:150}],
-  "Killjoy":[{n:"Alarmbot",c:200},{n:"Turret",c:200},{n:"Nanoswarm",c:200}],
-  "Cypher":[{n:"Trapwire",c:200},{n:"Cyber Cage",c:100},{n:"Spycam",c:200}],
-  "Sova":[{n:"Shock Bolt",c:150},{n:"Recon Bolt",c:200},{n:"Owl Drone",c:400}],
-  "Sage":[{n:"Barrier Orb",c:400},{n:"Slow Orb",c:100},{n:"Healing Orb",c:200}],
-  "Phoenix":[{n:"Curveball",c:200},{n:"Hot Hands",c:200},{n:"Blaze",c:200}],
-  "Jett":[{n:"Cloudburst",c:100},{n:"Updraft",c:100}],
-  "Raze":[{n:"Boom Bot",c:200},{n:"Blast Pack",c:200},{n:"Paint Shells",c:300}],
-  "Breach":[{n:"Aftershock",c:200},{n:"Flashpoint",c:200},{n:"Fault Line",c:250}],
-  "Reyna":[{n:"Leer",c:250}],
-  "Yoru":[{n:"Fakeout",c:100},{n:"Blindside",c:200}],
-  "Skye":[{n:"Trailblazer",c:200},{n:"Guiding Light",c:200}],
-  "Astra":[{n:"Nova Pulse",c:100},{n:"Nebula",c:100},{n:"Gravity Well",c:200}],
-  "KAY/O":[{n:"FRAG/ment",c:200},{n:"FLASH/drive",c:200}],
-  "Chamber":[{n:"Trademark",c:200},{n:"Rendezvous",c:200}],
-  "Neon":[{n:"Relay Bolt",c:200},{n:"Fast Lane",c:200}],
-  "Fade":[{n:"Prowler",c:200},{n:"Seize",c:200},{n:"Haunt",c:200}],
-  "Harbor":[{n:"Cascade",c:200},{n:"Cove",c:200},{n:"High Tide",c:200}],
-  "Gekko":[{n:"Mosh Pit",c:250},{n:"Wingman",c:300},{n:"Dizzy",c:200}],
-  "Deadlock":[{n:"Sonic Sensor",c:200},{n:"GravNet",c:200}],
-  "Iso":[{n:"Undercut",c:200},{n:"Double Tap",c:200}],
-  "Clove":[{n:"Ruse",c:200},{n:"Meddle",c:200}],
+  "Astra":[{n:"Estrella (gratis)",c:0},{n:"Estrella",c:150},{n:"Estrella",c:150},{n:"Estrella",c:150},{n:"Estrella",c:150}],
+  "Breach":[{n:"Réplica",c:200},{n:"Fulgor",c:250},{n:"Falla Sísmica",c:0}],
+  "Brimstone":[{n:"Baliza Potenciadora",c:200},{n:"Incendiario",c:250},{n:"Humo Celestial",c:0}],
+  "Chamber":[{n:"Marca Registrada",c:200},{n:"Cazador de Cabezas",c:100},{n:"Encuentro",c:0}],
+  "Clove":[{n:"Pasos Firmes",c:200},{n:"Interferencias",c:250},{n:"Treta Armada",c:0}],
+  "Cypher":[{n:"Cable Trampa",c:200},{n:"Prisión Cibernética",c:100},{n:"Cámara Espía",c:0}],
+  "Deadlock":[{n:"Gravired",c:200},{n:"Sensor Sónico",c:200},{n:"Barrera de Malla",c:0}],
+  "Fade":[{n:"Merodeador",c:250},{n:"Captura",c:200},{n:"Atormentar",c:0}],
+  "Gekko":[{n:"Mosh Pit",c:250},{n:"Wingman",c:300},{n:"Dizzy",c:0}],
+  "Harbor":[{n:"Cascada",c:150},{n:"Domo",c:350},{n:"Marea Alta",c:0}],
+  "Iso":[{n:"Contingencia",c:200},{n:"Socavar",c:200},{n:"Doble Disparo",c:0}],
+  "Jett":[{n:"Borrasca",c:200},{n:"Impulso Ascendente",c:150},{n:"Viento de Cola",c:0}],
+  "KAY/O":[{n:"FRAG/mento",c:200},{n:"FLASH/banco",c:250},{n:"PUNTO/cero",c:0}],
+  "Killjoy":[{n:"Alarma Bot",c:200},{n:"Nanoplaga",c:200},{n:"Torreta",c:0}],
+  "Neon":[{n:"Vía Rápida",c:300},{n:"Relámpago Semifrenado",c:200},{n:"Velocidad Máxima",c:0}],
+  "Omen":[{n:"Aparición Sombría",c:100},{n:"Paranoia",c:250},{n:"Manto Oscuro",c:0}],
+  "Phoenix":[{n:"Llamarada",c:150},{n:"Manos Calientes",c:200},{n:"Destello en Curva",c:0}],
+  "Raze":[{n:"Boombot",c:300},{n:"Paquete Explosivo",c:200},{n:"Cartuchos de Pintura",c:0}],
+  "Reyna":[{n:"Mirada Lasciva",c:250},{n:"Devorar",c:0},{n:"Despreciar",c:0}],
+  "Sage":[{n:"Orbe de Barrera",c:400},{n:"Orbe de Ralentización",c:200},{n:"Orbe de Sanación",c:0}],
+  "Skye":[{n:"Regrowth",c:150},{n:"Trailblazer",c:300},{n:"Guiding Light",c:0}],
+  "Sova":[{n:"Dron Búho",c:400},{n:"Flecha de Choque",c:150},{n:"Flecha de Reconocimiento",c:0}],
+  "Viper":[{n:"Veneno de Serpiente",c:300},{n:"Nube Venenosa",c:200},{n:"Cortina Tóxica",c:0}],
+  "Vyse":[{n:"Rosa de Metal",c:150},{n:"Enredadera Cizalla",c:200},{n:"Trampa Translocadora",c:0}],
+  "Yoru":[{n:"Engaño",c:200},{n:"Punto Ciego",c:250},{n:"Infiltración",c:0}],
 };
 
 const agentSel = document.getElementById('agent');
@@ -265,15 +266,15 @@ pullBtn.addEventListener('click', ()=>{
     abilityReel.classList.add('secured');
     document.getElementById('tagAbility').classList.add('show');
     ac.className='ability-stack';
-    ac.innerHTML = `<div class="ab-count">${res.bought.length}/${res.totalAbilities} SECURED</div>` + (res.bought.length
-      ? res.bought.map(a=>`<div class="ab-row">${svg('ability')}<div><div class="slot-name">${a.n}</div><div class="slot-cost">${a.c} CR</div></div></div>`).join('')
-      : `<div class="slot-empty" style="text-align:center;width:100%;">None affordable</div>`);
+    ac.innerHTML = `<div class="ab-count">${res.bought.length}/${res.totalAbilities} ASEGURADAS</div>` + (res.bought.length
+      ? res.bought.map(a=>`<div class="ab-row">${svg('ability')}<div><div class="slot-name">${a.n}</div><div class="slot-cost">${a.c>0?a.c+' CR':'GRATIS'}</div></div></div>`).join('')
+      : `<div class="slot-empty" style="text-align:center;width:100%;">Ninguna asequible</div>`);
 
     shieldReel.classList.add('secured');
     document.getElementById('tagShield').classList.add('show');
     sc.innerHTML = res.shield.c>0
       ? `<div class="slot-content">${svg(res.shield.icon)}<div class="slot-name">${res.shield.n}</div><div class="slot-cost">${res.shield.c} CR</div></div>`
-      : `<div class="slot-content">${svg('shieldNone')}<div class="slot-name">None</div></div>`;
+      : `<div class="slot-content">${svg('shieldNone')}<div class="slot-name">Ninguno</div></div>`;
 
     document.getElementById('figStart').textContent = credits;
     document.getElementById('figSpent').textContent = res.spent;
