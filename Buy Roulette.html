@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Buy Roulette</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0d0f13; --bg2:#15181e; --card:#1b1f27; --line:#2b303b;
+    --ink:#eceae4; --mute:#8b909c; --red:#ef4356; --red-dim:#7a2530;
+    --gold:#e8b95a; --green:#48c98a;
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  html{scroll-padding-top:env(safe-area-inset-top,0px);}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:'Rajdhani',sans-serif; font-size:17px;
+    display:flex; justify-content:center;
+    background-image:
+      linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%);
+  }
+  .wrap{width:100%; max-width:480px; padding:28px 18px 40px;}
+  h1{
+    font-family:'Oswald',sans-serif; font-weight:700; font-size:28px;
+    letter-spacing:.02em; margin:0 0 2px; color:var(--ink);
+  }
+  .sub{color:var(--mute); font-size:15px; margin:0 0 22px; line-height:1.4;}
+  .panel{
+    background:var(--card); border:1px solid var(--line); border-radius:10px;
+    padding:18px; margin-bottom:14px;
+  }
+  label{
+    display:block; font-family:'Oswald',sans-serif; font-size:12px;
+    color:var(--mute); margin-bottom:6px; letter-spacing:.03em;
+  }
+  input[type=number], select{
+    width:100%; background:var(--bg2); border:1px solid var(--line); color:var(--ink);
+    font-family:'Rajdhani',sans-serif; font-weight:600; font-size:17px;
+    padding:11px 12px; border-radius:7px; outline:none;
+  }
+  input[type=number]:focus, select:focus{border-color:var(--red);}
+  .row2{display:flex; gap:12px;}
+  .row2 > div{flex:1;}
+  select{appearance:none; -webkit-appearance:none;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238b909c' stroke-width='2'><path d='M6 9l6 6 6-6'/></svg>");
+    background-repeat:no-repeat; background-position:right 10px center; background-size:18px;
+  }
+  button.roll{
+    width:100%; margin-top:4px; padding:16px; border:none; border-radius:8px;
+    background:var(--red); color:#12141a; font-family:'Oswald',sans-serif;
+    font-weight:700; font-size:19px; letter-spacing:.04em; cursor:pointer;
+    transition:transform .08s ease, background .15s ease;
+  }
+  button.roll:active{transform:scale(.98);}
+  button.roll:disabled{background:var(--red-dim); color:#8b8f98; cursor:not-allowed;}
+  .hint{color:var(--mute); font-size:13px; margin-top:8px; min-height:16px;}
+
+  .result{display:none;}
+  .result.show{display:block;}
+  .rline{
+    display:flex; justify-content:space-between; align-items:baseline;
+    padding:10px 0; border-bottom:1px solid var(--line);
+  }
+  .rline:last-of-type{border-bottom:none;}
+  .rtag{font-family:'Oswald',sans-serif; font-size:11px; color:var(--mute); letter-spacing:.05em; width:78px; flex-shrink:0;}
+  .rval{font-weight:700; font-size:17px; text-align:right; flex:1;}
+  .rcost{color:var(--gold); font-size:13px; margin-left:8px; font-weight:600; white-space:nowrap;}
+  .empty{color:var(--mute); font-style:normal;}
+  .summary{
+    display:flex; justify-content:space-between; margin-top:14px; padding-top:12px;
+    border-top:1px solid var(--line); font-family:'Oswald',sans-serif; font-size:13px;
+  }
+  .summary b{color:var(--ink); font-family:'Rajdhani',sans-serif; font-size:16px;}
+  .left-ok{color:var(--green);}
+  .left-warn{color:var(--red);}
+  footer{color:var(--mute); font-size:12px; text-align:center; margin-top:22px; line-height:1.5;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>BUY ROULETTE</h1>
+  <p class="sub">Set your credits, pick your agent, and let the roll decide your loadout this round.</p>
+
+  <div class="panel">
+    <div class="row2">
+      <div>
+        <label for="credits">Credits</label>
+        <input type="number" id="credits" min="0" max="9000" step="50" value="4000">
+      </div>
+      <div>
+        <label for="agent">Agent</label>
+        <select id="agent"></select>
+      </div>
+    </div>
+    <button class="roll" id="rollBtn">ROLL LOADOUT</button>
+    <div class="hint" id="hint"></div>
+  </div>
+
+  <div class="panel result" id="result">
+    <div class="rline">
+      <span class="rtag">WEAPON</span>
+      <span class="rval" id="rWeapon">—</span>
+    </div>
+    <div class="rline">
+      <span class="rtag">SHIELD</span>
+      <span class="rval" id="rShield">—</span>
+    </div>
+    <div class="rline">
+      <span class="rtag">ABILITIES</span>
+      <span class="rval" id="rAbilities">—</span>
+    </div>
+    <div class="summary">
+      <span>SPENT: <b id="rSpent">0</b></span>
+      <span>CREDITS LEFT: <b id="rLeft">0</b></span>
+    </div>
+  </div>
+
+  <footer>Weapon &amp; ability prices are approximate to in-game values. This is an unofficial fan tool, not affiliated with Riot Games.</footer>
+</div>
+
+<script>
+const WEAPONS = [
+  {n:"Classic", c:0},{n:"Shorty", c:200},{n:"Frenzy", c:400},{n:"Ghost", c:500},{n:"Sheriff", c:800},
+  {n:"Stinger", c:1000},{n:"Spectre", c:1600},
+  {n:"Bucky", c:850},{n:"Judge", c:1500},
+  {n:"Bulldog", c:2050},{n:"Guardian", c:2250},{n:"Phantom", c:2900},{n:"Vandal", c:2900},
+  {n:"Marshal", c:950},{n:"Outlaw", c:2400},{n:"Operator", c:4700},
+  {n:"Ares", c:1600},{n:"Odin", c:3200},
+];
+const SHIELDS = [
+  {n:"None", c:0},{n:"Light Shield (25)", c:400},{n:"Heavy Shield (50)", c:1000},
+];
+const AGENTS = {
+  "Brimstone":[{n:"Stim Beacon",c:100},{n:"Incendiary",c:250}],
+  "Viper":[{n:"Poison Cloud",c:200},{n:"Snake Bite",c:200},{n:"Toxic Screen",c:200}],
+  "Omen":[{n:"Paranoia",c:150},{n:"Shrouded Step",c:100},{n:"Dark Cover",c:150}],
+  "Killjoy":[{n:"Alarmbot",c:200},{n:"Turret",c:200},{n:"Nanoswarm",c:200}],
+  "Cypher":[{n:"Trapwire",c:200},{n:"Cyber Cage",c:100},{n:"Spycam",c:200}],
+  "Sova":[{n:"Shock Bolt",c:150},{n:"Recon Bolt",c:200},{n:"Owl Drone",c:400}],
+  "Sage":[{n:"Slow Orb",c:100},{n:"Healing Orb",c:200},{n:"Barrier Orb",c:400}],
+  "Phoenix":[{n:"Curveball",c:200},{n:"Hot Hands",c:200},{n:"Blaze",c:200}],
+  "Jett":[{n:"Cloudburst",c:100},{n:"Updraft",c:100}],
+  "Raze":[{n:"Boom Bot",c:200},{n:"Blast Pack",c:200},{n:"Paint Shells",c:300}],
+  "Breach":[{n:"Aftershock",c:200},{n:"Flashpoint",c:200},{n:"Fault Line",c:250}],
+  "Reyna":[{n:"Leer",c:250}],
+  "Yoru":[{n:"Fakeout",c:100},{n:"Blindside",c:200}],
+  "Skye":[{n:"Trailblazer",c:200},{n:"Guiding Light",c:200}],
+  "Astra":[{n:"Nova Pulse",c:100},{n:"Nebula",c:100},{n:"Gravity Well",c:200}],
+  "KAY/O":[{n:"FRAG/ment",c:200},{n:"FLASH/drive",c:200}],
+  "Chamber":[{n:"Trademark",c:200},{n:"Rendezvous",c:200}],
+  "Neon":[{n:"Relay Bolt",c:200},{n:"Fast Lane",c:200}],
+  "Fade":[{n:"Prowler",c:200},{n:"Seize",c:200},{n:"Haunt",c:200}],
+  "Harbor":[{n:"Cascade",c:200},{n:"Cove",c:200},{n:"High Tide",c:200}],
+  "Gekko":[{n:"Mosh Pit",c:250},{n:"Wingman",c:300},{n:"Dizzy",c:200}],
+  "Deadlock":[{n:"Sonic Sensor",c:200},{n:"GravNet",c:200}],
+  "Iso":[{n:"Undercut",c:200},{n:"Double Tap",c:200}],
+  "Clove":[{n:"Ruse",c:200},{n:"Meddle",c:200}],
+};
+
+const agentSel = document.getElementById('agent');
+Object.keys(AGENTS).sort().forEach(name=>{
+  const o=document.createElement('option'); o.value=name; o.textContent=name;
+  agentSel.appendChild(o);
+});
+agentSel.value = "Jett";
+
+function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+
+function rollLoadout(credits, agentName){
+  const affordableWeapons = WEAPONS.filter(w=>w.c<=credits);
+  const weapon = pick(affordableWeapons.length?affordableWeapons:[WEAPONS[0]]);
+  let remaining = credits - weapon.c;
+
+  const affordableShields = SHIELDS.filter(s=>s.c<=remaining);
+  const shield = pick(affordableShields);
+  remaining -= shield.c;
+
+  const pool = [...AGENTS[agentName]].sort(()=>Math.random()-0.5);
+  const boughtAbilities = [];
+  for(const ab of pool){
+    if(remaining>=ab.c && Math.random()<0.55){
+      boughtAbilities.push(ab);
+      remaining -= ab.c;
+    }
+  }
+
+  const spent = credits - remaining;
+  return {weapon, shield, boughtAbilities, spent, remaining};
+}
+
+document.getElementById('rollBtn').addEventListener('click', ()=>{
+  const creditsInput = document.getElementById('credits');
+  let credits = parseInt(creditsInput.value, 10);
+  const hint = document.getElementById('hint');
+  if(isNaN(credits) || credits<0){
+    hint.textContent = "Enter a valid credit amount first.";
+    return;
+  }
+  credits = Math.min(credits, 9000);
+  hint.textContent = "";
+
+  const agentName = agentSel.value;
+  const res = rollLoadout(credits, agentName);
+
+  document.getElementById('rWeapon').innerHTML = res.weapon.n + `<span class="rcost">${res.weapon.c}</span>`;
+  document.getElementById('rShield').innerHTML = res.shield.n==="None"
+    ? `<span class="empty">None</span>`
+    : res.shield.n + `<span class="rcost">${res.shield.c}</span>`;
+
+  const abilEl = document.getElementById('rAbilities');
+  if(res.boughtAbilities.length===0){
+    abilEl.innerHTML = `<span class="empty">None</span>`;
+  } else {
+    abilEl.innerHTML = res.boughtAbilities.map(a=>`${a.n}<span class="rcost">${a.c}</span>`).join('<br>');
+  }
+
+  document.getElementById('rSpent').textContent = res.spent;
+  const leftEl = document.getElementById('rLeft');
+  leftEl.textContent = res.remaining;
+  leftEl.className = res.remaining >= 0 ? 'left-ok' : 'left-warn';
+
+  document.getElementById('result').classList.add('show');
+});
+</script>
+</body>
+</html>
